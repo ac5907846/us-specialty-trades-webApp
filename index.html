@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>US Specialty Trade Contracting Industries, 1998-2023</title>
+  <meta name="description" content="Firm size, market concentration, and structural change in the US electrical and plumbing/HVAC contracting industries, 1998-2023. Interactive companion to the research paper, built from public federal data.">
+  <link rel="canonical" href="https://specialty.electriai.com/">
+  <meta property="og:title" content="US Specialty Trade Contracting Industries, 1998-2023">
+  <meta property="og:description" content="Firm size, market concentration, and structural change in US electrical and plumbing/HVAC contracting, 1998-2023. Interactive companion to the research paper.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://specialty.electriai.com/">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <script src="js/vendor/chart.umd.min.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-row">
+      <div class="brand">
+        <svg class="brand-mark" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3"  y="12" width="4" height="9" rx="1" class="m1"/>
+          <rect x="10" y="7"  width="4" height="14" rx="1" class="m2"/>
+          <rect x="17" y="3"  width="4" height="18" rx="1" class="m3"/>
+        </svg>
+        <div>
+          <div class="brand-title">US Specialty Trade Contracting Industries</div>
+          <div class="brand-sub">Firm size, market concentration, and structural change, 1998-2023</div>
+        </div>
+      </div>
+      <nav class="tabs" role="tablist" aria-label="Sections">
+        <button class="tab is-active" data-view="overview" role="tab" aria-selected="true">Industry pulse</button>
+        <button class="tab" data-view="wage" role="tab" aria-selected="false">Wage benchmark</button>
+        <button class="tab" data-view="survival" role="tab" aria-selected="false">Survival outlook</button>
+        <button class="tab" data-view="states" role="tab" aria-selected="false">State explorer</button>
+        <button class="tab" data-view="outlook" role="tab" aria-selected="false">Market outlook</button>
+        <button class="tab" data-view="lab" role="tab" aria-selected="false">Consolidation lab</button>
+        <button class="tab" data-view="methods" role="tab" aria-selected="false">About</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div id="loading" class="loading">Loading data&hellip;</div>
+
+    <!-- ============================ OVERVIEW ============================ -->
+    <section id="view-overview" class="view" hidden>
+      <div class="intro">
+        <h1>An industry consolidating from the top</h1>
+        <p>Nine of ten US specialty contractors employ fewer than 20 people, yet the share of
+        employment held by firms with 500 or more employees has doubled since 1998. The panels
+        below track that reallocation, the thinning pipeline of new firms, and what has and has
+        not happened to pay. Every series is computed from public Census Bureau and BLS data.</p>
+      </div>
+      <div id="statTiles" class="tiles"></div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Employment share by firm size</h3>
+          <p class="card-sub">Share of trade employment, % &middot; SUSB 1998-2022</p>
+          <div class="chart-box"><canvas id="chShares"></canvas></div>
+        </div>
+        <div class="card">
+          <h3>The upper tail approaches Zipf</h3>
+          <p class="card-sub">Pareto exponent of the firm size distribution, MLE with 95% CI &middot; band = electrical</p>
+          <div class="chart-box"><canvas id="chAlpha"></canvas></div>
+        </div>
+        <div class="card">
+          <h3>Fewer firms are being founded</h3>
+          <p class="card-sub">Establishment entry and exit, % &middot; building equipment contractors (NAICS 2382), BDS 1978-2023</p>
+          <div class="chart-box"><canvas id="chEntry"></canvas></div>
+        </div>
+        <div class="card">
+          <h3>Pay doubled, the premium narrowed</h3>
+          <p class="card-sub">Average pay per employee, $ (left) and county wage premium, log points (right axis shown as its own series below)</p>
+          <div class="chart-box"><canvas id="chPay"></canvas></div>
+        </div>
+      </div>
+      <p class="foot-note">Sources: Statistics of US Businesses, County Business Patterns, Business
+      Dynamics Statistics, Occupational Employment and Wage Statistics. Methods and caveats are
+      documented in the companion research paper; series harmonised across the 2017 CBP disclosure
+      redesign.</p>
+    </section>
+
+    <!-- ============================ WAGE TOOL ============================ -->
+    <section id="view-wage" class="view" hidden>
+      <div class="intro">
+        <h1>Where does a wage sit in your state?</h1>
+        <p>Pick a trade and a state, enter an hourly wage, and see where it falls in the official
+        BLS wage distribution for that occupation. Useful for hiring offers, raise conversations,
+        and relocation decisions. Data: OEWS state percentiles, 2003-2024.</p>
+      </div>
+      <div class="card">
+        <div class="controls">
+          <label>Trade
+            <select id="wOcc"></select>
+          </label>
+          <label>State
+            <select id="wState"></select>
+          </label>
+          <label>Year
+            <select id="wYear"></select>
+          </label>
+          <label>Hourly wage, $
+            <input id="wWage" type="number" min="5" max="200" step="0.5" value="30">
+          </label>
+        </div>
+        <div id="wVerdict" class="verdict"></div>
+        <div class="chart-box tall"><canvas id="chWage"></canvas></div>
+        <p class="foot-note">Percentile placement is interpolated between the published 10th, 25th,
+        50th, 75th and 90th percentiles; wages outside that range are reported as below the 10th or
+        above the 90th. OEWS covers all employers of the occupation, union and non-union, across
+        industries.</p>
+      </div>
+      <div class="card">
+        <h3>The same wage over time</h3>
+        <p class="card-sub">State percentile band (p10-p90, shaded; median line) with your wage marked</p>
+        <div class="chart-box tall"><canvas id="chWageTime"></canvas></div>
+      </div>
+    </section>
+
+    <!-- ============================ SURVIVAL TOOL ============================ -->
+    <section id="view-survival" class="view" hidden>
+      <div class="intro">
+        <h1>How long do contracting firms last?</h1>
+        <p>Firm dissolution in building equipment contracting is almost entirely a small-firm
+        event: about 7 in every 100 firms with fewer than 20 employees close for good each year,
+        against fewer than 1 in 100 mid-size firms and essentially zero large ones. This tool turns
+        those observed rates into survival odds over a planning horizon. It is an actuarial
+        baseline, not a prediction for any particular firm.</p>
+      </div>
+      <div class="card">
+        <div class="controls">
+          <label>Firm size
+            <select id="sGroup">
+              <option value="small">Under 20 employees</option>
+              <option value="mid">20-499 employees</option>
+              <option value="large">500+ employees</option>
+            </select>
+          </label>
+          <label><span class="lab-line">Horizon: <b id="sHorizonLabel">10</b> years</span>
+            <input id="sHorizon" type="range" min="1" max="25" value="10">
+          </label>
+        </div>
+        <div id="sVerdict" class="verdict"></div>
+        <div class="chart-box tall"><canvas id="chSurvival"></canvas></div>
+        <p class="foot-note">Survival compounds the mean annual firm death rate observed over the
+        last five BDS years for the chosen size class. A firm death requires every establishment of
+        the firm to close; a firm that is acquired and keeps operating is not a death. Source: BDS
+        firm-size files, NAICS 2382, 1978-2023.</p>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Annual dissolution rate by firm size</h3>
+          <p class="card-sub">% of firms per year, 1978-2023</p>
+          <div class="chart-box"><canvas id="chDeath"></canvas></div>
+        </div>
+        <div class="card">
+          <h3>The aging owner base behind it</h3>
+          <p class="card-sub">Share of firms young (0-5 yrs) vs mature (16+ yrs), %</p>
+          <div class="chart-box"><canvas id="chAging"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ STATE EXPLORER ============================ -->
+    <section id="view-states" class="view" hidden>
+      <div class="intro">
+        <h1>Your state against the nation</h1>
+        <p>County Business Patterns aggregated to the state level: market size, pay, the trade wage
+        premium over the average local job, and how much of the trade&rsquo;s employment sits in
+        large establishments. The dotted line is the national value.</p>
+      </div>
+      <div class="card slim">
+        <div class="controls">
+          <label>Trade
+            <select id="stTrade">
+              <option value="electrical">Electrical (NAICS 238210)</option>
+              <option value="plumbing_hvac">Plumbing / HVAC (NAICS 238220)</option>
+            </select>
+          </label>
+          <label>State
+            <select id="stState"></select>
+          </label>
+        </div>
+      </div>
+      <div id="stTiles" class="tiles"></div>
+      <div class="grid-2">
+        <div class="card"><h3>Establishments</h3><div class="chart-box"><canvas id="chStEst"></canvas></div></div>
+        <div class="card"><h3>Average pay per employee, $</h3><div class="chart-box"><canvas id="chStPay"></canvas></div></div>
+        <div class="card"><h3>Trade wage premium, log points</h3><div class="chart-box"><canvas id="chStPrem"></canvas></div></div>
+        <div class="card"><h3>Large-establishment employment share, %</h3><div class="chart-box"><canvas id="chStShlg"></canvas></div></div>
+      </div>
+      <p class="foot-note">State series cover counties publishable under CBP disclosure rules; the
+      2017 redesign removes small cells, so small-state series can step at 2017. Premium is the
+      employment-weighted log difference between trade pay and all-industry pay in the same county.</p>
+    </section>
+
+    <!-- ============================ MARKET OUTLOOK ============================ -->
+    <section id="view-outlook" class="view" hidden>
+      <div class="intro">
+        <h1>Where do markets like yours go next?</h1>
+        <p>Every US county is classed by how many electrical (or plumbing/HVAC) establishments it
+        hosts. Tracking every county across three long windows gives the empirical odds of a market
+        growing, shrinking, or holding its class: the same Markov matrices as in the research
+        paper, harmonised across the 2017 disclosure redesign.</p>
+      </div>
+      <div class="card">
+        <div class="controls">
+          <label>Trade
+            <select id="oTrade"></select>
+          </label>
+          <label>Window
+            <select id="oEra">
+              <option value="1998-2007">1998&ndash;2007</option>
+              <option value="2007-2016">2007&ndash;2016 (recession era)</option>
+              <option value="2017-2023" selected>2017&ndash;2023</option>
+            </select>
+          </label>
+          <label>County size class at the start
+            <select id="oClass"></select>
+          </label>
+        </div>
+        <div id="oVerdict" class="verdict"></div>
+        <div class="chart-box tall"><canvas id="chOutlook"></canvas></div>
+        <div id="oStrip" class="mini-strip"></div>
+        <p class="foot-note">Counties below three establishments are unpublished after the 2017 CBP
+        redesign, so the under-3 class cannot be tracked into 2017&ndash;2023 and its row mixes true
+        zeros with censoring in earlier windows. Connecticut&rsquo;s 2022 switch from counties to
+        planning regions produces a handful of artificial exits in the last window.</p>
+      </div>
+    </section>
+
+    <!-- ============================ CONSOLIDATION LAB ============================ -->
+    <section id="view-lab" class="view" hidden>
+      <div class="intro">
+        <h1>Consolidation lab</h1>
+        <p>Three tools that turn the paper&rsquo;s estimates into things you can move. They describe
+        population-level regularities from public data. Use them for orientation, not as
+        forecasts for any single firm or market.</p>
+      </div>
+
+      <div class="card">
+        <h3>1 &middot; What consolidation does to the spread of local pay</h3>
+        <p class="card-sub">Hierarchical location-scale model, county wage premium, 1998&ndash;2016</p>
+        <div class="controls">
+          <label>Trade
+            <select id="labTrade"></select>
+          </label>
+          <label><span class="lab-line">Rise in large-establishment employment share: <b id="labShareOut">+10 pp</b></span>
+            <input id="labShare" type="range" min="0" max="25" value="10">
+          </label>
+        </div>
+        <div class="chart-box tall"><canvas id="chLabDist"></canvas></div>
+        <div id="labQuants" class="mini-strip"></div>
+        <p id="labSimNote" class="foot-note"></p>
+      </div>
+
+      <div class="card">
+        <h3>2 &middot; If the second wave keeps its pace</h3>
+        <p class="card-sub">Employment share of firms with 500+ employees, observed and extrapolated</p>
+        <div class="controls">
+          <label><span class="lab-line">Assumed pace: <b id="labPaceOut">0.51 pp/yr</b></span>
+            <input id="labPace" type="range" min="0" max="120" value="51">
+          </label>
+        </div>
+        <div class="chart-box tall"><canvas id="chLabProj"></canvas></div>
+        <p id="labProjNote" class="foot-note"></p>
+      </div>
+
+      <div class="card">
+        <h3>3 &middot; The succession clock</h3>
+        <p class="card-sub">Cumulative dissolution odds at observed BDS death rates (NAICS 2382)</p>
+        <div class="controls">
+          <label><span class="lab-line">Horizon: <b id="labHorizonOut">10 years</b></span>
+            <input id="labHorizon" type="range" min="1" max="25" value="10">
+          </label>
+        </div>
+        <div class="chart-box tall"><canvas id="chLabClock"></canvas></div>
+        <p id="labClockNote" class="foot-note"></p>
+      </div>
+    </section>
+
+    <!-- ============================ METHODS & DATA ============================ -->
+    <section id="view-methods" class="view" hidden>
+      <div class="intro">
+        <h1>About</h1>
+        <p>Everything on this site is computed from public federal statistical data and reproduces
+        series reported in the companion research manuscript on the industrial organization of the
+        US specialty trades. Series that cross the 2017 County Business Patterns disclosure redesign
+        are harmonised by applying the post-2017 three-establishment publication floor to every
+        year.</p>
+      </div>
+      <div class="card">
+        <h3>Sources</h3>
+        <div id="mSources"></div>
+      </div>
+      <div class="card">
+        <h3>Paper and code</h3>
+        <div id="mLinks"></div>
+      </div>
+      <div class="card">
+        <h3>Download the data behind the charts</h3>
+        <p class="card-sub">Static JSON, regenerated from the research pipeline</p>
+        <div id="mDownloads"></div>
+        <p class="foot-note">Definitions: firm sizes are enterprise employment (SUSB); the trade wage
+        premium is the log difference between trade pay and all-industry pay in the same county and
+        year (CBP); a firm death requires every establishment of a firm to close (BDS), so
+        acquisitions are not deaths; hourly percentiles are occupation-level (OEWS) and include
+        workers outside NAICS 238.</p>
+      </div>
+    </section>
+  </main>
+
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>Built from public data: US Census Bureau (SUSB, CBP, BDS) and US Bureau of Labor Statistics (OEWS).</span>
+      <span>Companion to a research manuscript on the industrial organization of the US specialty trades &middot; specialty.electriai.com</span>
+    </div>
+  </footer>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

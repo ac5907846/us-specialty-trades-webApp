@@ -1,0 +1,83 @@
+/* ---------------------------------------------------------------------
+   Design tokens. Light mode only.
+--------------------------------------------------------------------- */
+:root {
+  color-scheme: light;
+  --surface-0: #f5f6f9;      /* page background */
+  --surface-1: #ffffff;      /* cards */
+  --surface-2: #eef0f5;      /* wash, control fills */
+  --text-1: #1c1e26;
+  --text-2: #494e5c;
+  --text-3: #818697;
+  --rule: #d8dbe4;
+  --grid: #e9ebf1;
+
+  --cobalt: #1b56ad;         /* electrical / primary */
+  --green:  #0e7a43;         /* plumbing-HVAC / positive */
+  --amber:  #d98e12;         /* accent, always labelled */
+  --rose:   #a92458;         /* alerts, hot spots */
+  --cobalt-soft: rgba(27, 86, 173, 0.14);
+  --green-soft:  rgba(14, 122, 67, 0.14);
+  --amber-soft:  rgba(217, 142, 18, 0.16);
+  --rose-soft:   rgba(169, 36, 88, 0.14);
+
+  --radius: 12px;
+  --shadow: 0 1px 2px rgba(16, 24, 40, 0.05), 0 4px 16px rgba(16, 24, 40, 0.06);
+  --font: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--font);
+  background: var(--surface-0);
+  color: var(--text-1);
+  font-size: 15px;
+  line-height: 1.55;
+}
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+
+/* header ------------------------------------------------------------- */
+.site-header {
+  background: var(--surface-1);
+  border-bottom: 1px solid var(--rule);
+  position: sticky; top: 0; z-index: 50;
+}
+.header-row {
+  display: flex; align-items: center; gap: 18px;
+  padding-top: 12px; padding-bottom: 12px; flex-wrap: wrap;
+}
+@media (max-width: 1150px) {
+  .tabs { order: 3; width: 100%; justify-content: space-between; }
+}
+.brand { display: flex; align-items: center; gap: 11px; margin-right: auto; }
+.brand-mark { width: 30px; height: 30px; }
+.brand-mark .m1 { fill: var(--amber); }
+.brand-mark .m2 { fill: var(--green); }
+.brand-mark .m3 { fill: var(--cobalt); }
+.brand-title { font-weight: 700; font-size: 16px; letter-spacing: -0.01em; }
+.brand-sub { font-size: 12px; color: var(--text-3); }
+
+/* main --------------------------------------------------------------- */
+main { padding: 28px 20px 60px; }
+.intro { max-width: 760px; margin: 6px 0 22px; }
+.intro h1 { font-size: 26px; letter-spacing: -0.02em; margin: 0 0 8px; }
+.intro p { color: var(--text-2); margin: 0; }
+.view[hidden] { display: none; }
+.loading { padding: 60px 0; text-align: center; color: var(--text-3); }
+
+.grid-2 {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 18px;
+}
+@media (max-width: 860px) { .grid-2 { grid-template-columns: 1fr; } }
+
+.foot-note { color: var(--text-3); font-size: 12.5px; max-width: 860px; margin-top: 18px; }
+
+/* footer ------------------------------------------------------------- */
+.site-footer {
+  border-top: 1px solid var(--rule);
+  padding: 18px 0 26px; color: var(--text-3); font-size: 12.5px;
+  background: var(--surface-1);
+}
+.site-footer .wrap { display: flex; flex-direction: column; gap: 4px; }
