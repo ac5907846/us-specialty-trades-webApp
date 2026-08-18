@@ -2,7 +2,11 @@
 
 A static, dependency-light web app (light mode only) that visualizes the structure, dynamism,
 and pay of the US electrical (NAICS 238210) and plumbing/HVAC (238220)
-contracting industries, and turns two of the findings into interactive tools:
+contracting industries. It is the interactive companion to the research
+manuscript "Consolidation, business dynamism, and pay in US specialty trade
+contracting" (under review); the full analysis pipeline lives at
+https://github.com/ac5907846/us-specialty-trades. The app turns the findings
+into interactive tools:
 
 - **Industry pulse**: headline indicators and the four core trends
   (consolidation, tail exponent, entry/exit, pay).

@@ -18,12 +18,10 @@ const SOURCES = [
 const FILES = ["overview", "dynamism", "oews", "states", "stylized",
                "transitions", "implications"];
 
-// Fill in when the code is published on GitHub, e.g.
-// "https://github.com/<user>/us-specialty-trades"
-const REPO_URL = "";
-const PAPER_NOTE = "Companion to the research manuscript \"Firm Size, Market " +
-  "Concentration, and Structural Change in the United States Specialty Trade " +
-  "Contracting Industries, 1998-2023\" (under review).";
+const REPO_URL = "https://github.com/ac5907846/us-specialty-trades";
+const PAPER_NOTE = "Companion to the research manuscript \"Consolidation, " +
+  "business dynamism, and pay in US specialty trade contracting\" " +
+  "(under review).";
 
 export function render() {
   document.getElementById("mSources").innerHTML = `
